@@ -34,20 +34,31 @@ Which macroeconomic, supply-side, and institutional factors most strongly drive 
 ```
 ml-final-project/
 │
-├── data/                          # Raw source files (not committed)
-│
-├── data_exploring.ipynb           # Notebook 1 — Data pipeline
-├── eda.ipynb                      # Notebook 2 — Exploratory data analysis
-├── clustering.ipynb               # Notebook 3 — Clustering analysis
-├── modelling.ipynb                # Notebook 4 — Model training
-├── metrics.ipynb                  # Notebook 5 — Evaluation and comparison
-│
-├── model_data.xlsx                # Processed panel dataset (output of Notebook 1)
-├── model_data_clustered.xlsx      # Panel with cluster labels (output of Notebook 3)
-├── predictions.csv                # All model predictions on test set (output of Notebook 4)
-├── report_metrics_table.csv       # Final metrics table for the report (output of Notebook 5)
-│
-└── README.md
+├── README.md
+├── additional resources/
+├── s1-data-handling/
+│   ├── data_handling.ipynb
+│   └── data/
+│       ├── building_permits.csv
+│       ├── Gross domestic product (GDP) and main components (output, expenditure and income).csv
+│       ├── Harmonised index of consumer prices (HICP).csv
+│       ├── house_price_index.csv
+│       ├── long_term_rates.csv
+│       ├── model_data.csv
+│       ├── mpd_data.csv
+│       ├── Old-age-dependency ratio.csv
+│       ├── Population density.csv
+│       └── unemployment.csv
+├── s2-exploratory-data-analysis/
+│   └── exploratory_data_analysis.ipynb
+├── s3-clustering/
+│   └── clustering.ipynb
+├── s4-modelling/
+│   ├── modelling.ipynb
+│   └── predictions.csv
+└── s5-metrics/
+    ├── metrics.ipynb
+    └── report_metrics_table.csv
 ```
 
 **Run order:** 1 → 2 → 3 → 4 → 5. Each notebook depends on the output file of the previous one.
@@ -56,22 +67,22 @@ ml-final-project/
 
 ## Notebooks
 
-### 1. `data_exploring.ipynb` — Data Pipeline
+### 1. `s1-data-handling/data_handling.ipynb` — Data Pipeline
 
 Constructs the final modelling panel from ten raw data sources. Handles frequency alignment (monthly → quarterly, annual → quarterly), country standardisation across Eurostat, ECB, and MARPOR naming conventions, feature engineering (quarter-on-quarter growth rates, two lags for all key predictors, eurozone flags), and forward-filling of slow-moving structural variables.
 
-**Input:** Raw CSV files in `./data/`
-**Output:** `model_data.xlsx` — 1,704 rows × 39 columns, 26 EU countries, 2005-Q3 to 2025-Q2
+**Input:** Raw CSV files in `./s1-data-handling/data/`
+**Output:** `model_data.csv` — 1,704 rows × 39 columns, 26 EU countries, 2005-Q3 to 2025-Q2
 
 Key variables: HPI growth (target), GDP, HICP inflation, unemployment, building permits, long-term interest rates, ECB mortgage rates, old-age dependency ratio, population density, parliament ideology score (MARPOR rile).
 
 ---
 
-### 2. `eda.ipynb` — Exploratory Data Analysis
+### 2. `s2-exploratory-data-analysis/exploratory_data_analysis.ipynb` — Exploratory Data Analysis
 
 Systematic exploration of the panel dataset across nine sections: dataset overview, target variable deep-dive, feature distributions, temporal trends, correlation analysis, cross-country heterogeneity, autocorrelation structure, train/test split analysis, and a pre-modelling checklist.
 
-**Input:** `model_data.xlsx`
+**Input:** `model_data.csv`
 **Key findings:**
 - Target (next-quarter HPI growth) is near-normally distributed (skewness −0.24, kurtosis 1.94)
 - Strong autocorrelation at lag-1 (0.632) and lag-4 (0.548), suggesting a quarterly cycle
@@ -81,12 +92,12 @@ Systematic exploration of the panel dataset across nine sections: dataset overvi
 
 ---
 
-### 3. `clustering.ipynb` — Clustering Analysis
+### 3. `s3-clustering/clustering.ipynb` — Clustering Analysis
 
 Identifies housing market regimes using two approaches. Includes a full bibliography section with key references from the comparative housing literature.
 
-**Input:** `model_data.xlsx`
-**Output:** `model_data_clustered.xlsx` — adds `cluster_data`, `cluster_dbscan`, `cluster_literature`
+**Input:** `model_data.csv`
+**Output:** `model_data_clustered.csv` — adds `cluster_data`, `cluster_dbscan`, `cluster_literature`
 
 **Data-driven clustering (PCA + K-Means + DBSCAN):**
 - PCA retains 4 components explaining 82% of variance; PC1 captures a growth/dynamism vs ageing/stagnation axis; PC2 captures political orientation and interest rate environment
@@ -108,11 +119,11 @@ ANOVA confirms literature cluster means differ significantly (F = 7.56, p < 0.00
 
 ---
 
-### 4. `modelling.ipynb` — Model Training
+### 4. `s4-modelling/modelling.ipynb` — Model Training
 
 Trains all models and generates predictions on the held-out test set (2022-Q1 to 2025-Q2). Uses walk-forward expanding-window cross-validation (5 folds, `TimeSeriesSplit`) within the training set for hyperparameter selection. The test set is never used during training.
 
-**Input:** `model_data_clustered.xlsx`
+**Input:** `model_data_clustered.csv`
 **Output:** `predictions.csv` — 364 rows × 46 columns (7 model metadata columns + 39 prediction columns)
 
 **Phase 1 — Benchmarks (pooled):**
@@ -136,7 +147,7 @@ All four ML models retrained within each of the 4 literature clusters (East, Wes
 
 ---
 
-### 5. `metrics.ipynb` — Evaluation and Comparison
+### 5. `s5-metrics/metrics.ipynb` — Evaluation and Comparison
 
 Loads `predictions.csv` and produces the full comparative evaluation. Answers each research question systematically with tables, charts, and a final auto-generated RQ summary.
 
