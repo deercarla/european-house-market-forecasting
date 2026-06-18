@@ -179,24 +179,6 @@ Loads `predictions.csv` and produces the full comparative evaluation. Answers ea
 
 ---
 
-## Key References
-
-Andrews, D., Caldera Sanchez, A., & Johansson, A. (2011). Housing markets and structural policies in OECD countries. *OECD Economics Department Working Papers*, No. 836. https://doi.org/10.1787/5kgk8t2k9vf3-en
-
-Calza, A., Monacelli, T., & Stracca, L. (2013). Housing finance and monetary policy. *Journal of the European Economic Association*, 11(S1), 101–122. https://doi.org/10.1111/j.1542-4774.2012.01095.x
-
-Egert, B., & Mihaljek, D. (2007). Determinants of house prices in Central and Eastern Europe. *Comparative Economic Studies*, 49(3), 367–388. https://doi.org/10.1057/palgrave.ces.8100221
-
-Geron, A. (2022). *Hands-on machine learning with Scikit-Learn, Keras, and TensorFlow* (3rd ed.). O'Reilly Media.
-
-Hall, P. A., & Soskice, D. (2001). *Varieties of capitalism*. Oxford University Press.
-
-Jolliffe, I. T., & Cadima, J. (2016). Principal component analysis: A review and recent developments. *Philosophical Transactions of the Royal Society A*, 374(2065). https://doi.org/10.1098/rsta.2015.0202
-
-Kemeny, J. (1995). *From public housing to the social market*. Routledge.
-
----
-
 ## Requirements
 
 ```
